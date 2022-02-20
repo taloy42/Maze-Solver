@@ -236,7 +236,6 @@ def get_clicked_pos(pos, rows, width):
 
 def main_loop(win, width):
     ROWS = 100
-    # grid = make_grid(ROWS, width)
     grid = make_grid(ROWS, width)
 
     start = None
@@ -289,6 +288,26 @@ def main_loop(win, width):
                     end = None
                     state = None
                     grid = make_grid(ROWS, width)
+                elif event.key == pygame.K_r:
+                    grid = gen_maze_grid(ROWS, width)
+                    start = grid[0][0]
+                    start.make_start()
+                    end = grid[ROWS-1][ROWS-2]
+                    end.make_end()
+                    state = None
+                elif event.key == pygame.K_s:
+                    import tkinter as tk
+                    from tkinter import simpledialog
+                    tk.Tk().wm_withdraw() #to hide the main window
+                    ROWS = simpledialog.askinteger("resize","enter new size")
+                    grid = make_grid(ROWS, width)
+                    start = None
+                    end = None
+                    state = None
+                    run = True
+                    started = False
+                    paused = False
+                    continue
                 if start and end \
                     and event.key == pygame.K_SPACE and not started:
                     for row in grid:
@@ -298,13 +317,6 @@ def main_loop(win, width):
                 if event.key == pygame.K_p:
                     if not (state is True or state is False):
                         astar_alg(lambda: draw_grid(win, grid, ROWS, width), grid, start, end, state)
-                if event.key == pygame.K_r:
-                    grid = gen_maze_grid(ROWS, width)
-                    start = grid[0][0]
-                    start.make_start()
-                    end = grid[ROWS-1][ROWS-2]
-                    end.make_end()
-                    state = None
     pygame.quit()
 
 
